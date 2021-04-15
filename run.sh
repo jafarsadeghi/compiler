@@ -3,7 +3,7 @@ mkdir -p out
 mkdir -p report
 cd ./tests
 prefix="t" ;
-dirlist=(`ls ${prefix}*.in`) ;
+dirlist=(`ls ${prefix}*.in`);
 OUTPUT_DIRECTORY="out/"
 TEST_DIRECTORY="tests/"
 REPORT_DIRECTORY="report/"
@@ -16,7 +16,7 @@ do
     output_filename="$filename.out"
     report_filename="$filename.report.txt"
     echo "Running Test $filename -------------------------------------"
-    javac src/main.java
+    javac main.java
     if [ $? -eq 1 ]; then
         echo "Compile Error"
     else
