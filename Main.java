@@ -244,33 +244,36 @@ public class Main {
 
     }
 
-    private static void receiver(int type, String keyWord) throws IOException {
-        switch (type) {
-            case ID:
-                fileWriter.write("T_ID " + keyWord);
-                System.out.println("T_ID " + keyWord);
-                break;
-            case INTEGER:
-                fileWriter.write("T_INTLITERAL " + keyWord);
-                System.out.println("T_INTLITERAL " + keyWord);
-                break;
-            case DOUBLE:
-                fileWriter.write("T_DOUBLELITERAL " + keyWord);
-                System.out.println("T_DOUBLELITERAL " + keyWord);
-                break;
-            case STRING:
-                fileWriter.write("T_STRINGLITERAL " + keyWord);
-                System.out.println("T_STRINGLITERAL " + keyWord);
-                break;
-            case BOOLEAN:
-                fileWriter.write("T_BOOLEANLITERAL " + keyWord);
-                System.out.println("T_BOOLEANLITERAL " + keyWord);
-                break;
-            case KEYWORD:
-                fileWriter.write(keyWord);
-                System.out.println(keyWord);
-                break;
-
+    private static void receiver(int type, String keyWord)  {
+        try {
+            switch (type) {
+                case ID:
+                    fileWriter.write("T_ID " + keyWord +'\n');
+                    System.out.println("T_ID " + keyWord);
+                    break;
+                case INTEGER:
+                    fileWriter.write("T_INTLITERAL " + keyWord+'\n');
+                    System.out.println("T_INTLITERAL " + keyWord);
+                    break;
+                case DOUBLE:
+                    fileWriter.write("T_DOUBLELITERAL " + keyWord+'\n');
+                    System.out.println("T_DOUBLELITERAL " + keyWord);
+                    break;
+                case STRING:
+                    fileWriter.write("T_STRINGLITERAL " + keyWord+'\n');
+                    System.out.println("T_STRINGLITERAL " + keyWord);
+                    break;
+                case BOOLEAN:
+                    fileWriter.write("T_BOOLEANLITERAL " + keyWord+'\n');
+                    System.out.println("T_BOOLEANLITERAL " + keyWord);
+                    break;
+                case KEYWORD:
+                    fileWriter.write(keyWord+'\n');
+                    System.out.println(keyWord);
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
