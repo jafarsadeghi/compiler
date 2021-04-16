@@ -27,7 +27,7 @@ public class Main {
             if (string.equals("$")) {
                 break;
             } else
-            code.append(string).append("\n");
+                code.append(string).append("\n");
         }
 
         while (code.length() > i) {
@@ -41,10 +41,9 @@ public class Main {
                     i++;
                 }
                 resolver(idBuilder.toString());
-            }
-            else if (keyCharacters.contains(ch)) {
+            } else if (keyCharacters.contains(ch)) {
                 String str = String.valueOf(ch);
-                if (ch == '+' || ch == '-' || ch == '*' || ch == '!' ||ch == '<' || ch == '=' || ch == '>' ) {
+                if (ch == '+' || ch == '-' || ch == '*' || ch == '!' || ch == '<' || ch == '=' || ch == '>') {
                     if (code.length() == i + 1) {
                         receiver(KEYWORD, str);
                     } else {
@@ -92,11 +91,9 @@ public class Main {
                     receiver(KEYWORD, str);
                     i++;
                 }
-            }
-            else if (Character.isDigit(ch)) {
+            } else if (Character.isDigit(ch)) {
                 i = numberDetector(code.toString(), i);
-            }
-            else if (ch == '\"') {
+            } else if (ch == '\"') {
                 i++;
                 StringBuilder string = new StringBuilder("\"");
                 if (code.charAt(i) == '\"') {
@@ -109,11 +106,9 @@ public class Main {
                     receiver(STRING, string.append("\"").toString());
                     i++;
                 }
-            }
-            else if (ch == ' ' || ch == '\n') {
+            } else if (ch == ' ' || ch == '\n') {
                 i++;
-            }
-            else {
+            } else {
                 System.out.println("ino yadetoon raft: " + ch);
                 i++;
             }
@@ -157,7 +152,7 @@ public class Main {
 
     private static int numberDetector(String code, int i) {
         boolean hasDecimal = false;
-        if (code.length() > i + 2 && code.charAt(i) == '0' && (code.charAt(i + 1) == 'x' || code.charAt(i + 1) == 'X') && (Character.isDigit(code.charAt(i + 2)) || code.charAt(i) >= 'a' && code.charAt(i) <= 'f') || (code.charAt(i) >= 'A' && code.charAt(i) <= 'F')) {
+        if (code.length() > i + 2 && code.charAt(i) == '0' && (code.charAt(i + 1) == 'x' || code.charAt(i + 1) == 'X') && (Character.isDigit(code.charAt(i + 2)) || (code.charAt(i + 2) >= 'a' && code.charAt(i + 2) <= 'f') || (code.charAt(i + 2) >= 'A' && code.charAt(i + 2) <= 'F'))) {
             StringBuilder hex = new StringBuilder("0").append(code.charAt(++i));
             i++;
             while (code.length() > i && (Character.isDigit(code.charAt(i)) || (code.charAt(i) >= 'a' && code.charAt(i) <= 'f') || (code.charAt(i) >= 'A' && code.charAt(i) <= 'F'))) {
