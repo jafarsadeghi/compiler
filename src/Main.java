@@ -1,17 +1,17 @@
 
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.regex.*;
 
 public class Main {
 
 
-    static int ID = 0;
-    static int STRING = 1;
-    static int INTEGER = 2;
-    static int DOUBLE = 3;
-    static int BOOLEAN = 4;
-    static int CHARACTER = 5;
+    final static int ID = 0;
+    final static int STRING = 1;
+    final static int INTEGER = 2;
+    final static int DOUBLE = 3;
+    final static int BOOLEAN = 4;
+    final static int KEYWORD = 5;
     static int i = 0;
 
 
@@ -19,18 +19,21 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         StringBuilder code = new StringBuilder("");
-        Hashtable<String , String > keywords = initiliazeKeyWords();
-        Character[] alphabet = {'+', '-', '(', ')' , '*' , '/' , '%', '<' , '>' , '=' , '!' , '&' ,'|' , ';' , ',' , '.' , '[' , ']'};
+        Character[] alphabet = {'+', '-', '(', ')', '*', '/', '%', '<', '>', '=', '!', '&', '|', ';', ',', '.', '[', ']', '{', '}'};
         ArrayList<Character> keyCharacters = new ArrayList<Character>(Arrays.asList(alphabet));
 
-        while (scanner.hasNext()) {
-            code.append(scanner.nextLine()).append("\n");
+        while (true) {
+            String string = scanner.nextLine();
+            if (string.equals("$")) {
+                break;
+            } else
+            code.append(string).append("\n");
         }
 
-        StringBuilder idBuilder = new StringBuilder("");
         while (code.length() > i) {
             char ch = code.charAt(i);
             if (Character.isLetter(ch)) {
+                StringBuilder idBuilder = new StringBuilder("");
                 idBuilder.append(ch);
                 i++;
                 while (code.length() > i && Character.isLetterOrDigit(code.charAt(i)) || code.charAt(i) == '_') {
@@ -38,66 +41,117 @@ public class Main {
                     i++;
                 }
                 resolver(idBuilder.toString());
-            } else if (ch == '/') {
-                if (code.length() == i + 1) {
-                    receiver(CHARACTER, "/");
-                } else {
-                    switch (code.charAt(++i)) {
-                        case '/':
+            }
+            else if (keyCharacters.contains(ch)) {
+                String str = String.valueOf(ch);
+                if (ch == '+' || ch == '-' || ch == '*' || ch == '!' ||ch == '<' || ch == '=' || ch == '>' ) {
+                    if (code.length() == i + 1) {
+                        receiver(KEYWORD, str);
+                    } else {
+                        if (code.charAt(i + 1) == '=') {
+                            receiver(KEYWORD, str.concat("="));
                             i++;
-                            while (code.charAt(i) != '\n') {
-                                i++;
-                            }
-                        case '*':
-                            i++;
-                            while (code.length() > i+1 && !(code.charAt(i) == '*' && code.charAt(i+1) == '/')) {
-                                i++;
-                            }
-                        case '=':
-                            receiver(CHARACTER, "/=");
-                        default:
-                            receiver(CHARACTER, "/");
+                        } else
+                            receiver(KEYWORD, str);
                     }
+                    i++;
+                } else if (ch == '/') {
+                    if (code.length() == i + 1) {
+                        receiver(KEYWORD, "/");
+                    } else {
+                        switch (code.charAt(++i)) {
+                            case '/':
+                                i++;
+                                while (code.charAt(i) != '\n') {
+                                    i++;
+                                }
+                                i++;
+                                break;
+                            case '*':
+                                i++;
+                                while (code.length() > i + 1 && !(code.charAt(i) == '*' && code.charAt(i + 1) == '/')) {
+                                    i++;
+                                }
+                                i += 2;
+                                break;
+                            case '=':
+                                receiver(KEYWORD, "/=");
+                                i++;
+                                break;
+                            default:
+                                receiver(KEYWORD, "/");
+                                break;
+                        }
+                    }
+                } else if (ch == '&' || ch == '|') {
+                    if (code.charAt(++i) == ch) {
+                        receiver(KEYWORD, str.concat(str));
+                    }
+                    i++;
+                } else {
+                    receiver(KEYWORD, str);
+                    i++;
                 }
-            } else if (keyCharacters.contains(ch)) {
-                receiver(CHARACTER, String.valueOf(ch));
-                i++;
-            } else if (Character.isDigit(ch)) {
+            }
+            else if (Character.isDigit(ch)) {
                 i = numberDetector(code.toString(), i);
+            }
+            else if (ch == '\"') {
+                i++;
+                StringBuilder string = new StringBuilder("\"");
+                if (code.charAt(i) == '\"') {
+                    receiver(STRING, "");
+                } else {
+                    while (code.charAt(i) != '\"') {
+                        string.append(code.charAt(i));
+                        i++;
+                    }
+                    receiver(STRING, string.append("\"").toString());
+                    i++;
+                }
+            }
+            else if (ch == ' ' || ch == '\n') {
+                i++;
+            }
+            else {
+                System.out.println("ino yadetoon raft: " + ch);
+                i++;
             }
         }
     }
 
-    private static Hashtable<String, String> initiliazeKeyWords() {
+    private static Hashtable<String, String> initializeKeyWords() {
 
-        Hashtable<String , String> result = new Hashtable<>();
-        result.put("void" , "void");
-        result.put("int" , "int");
-        result.put("double" ,"double");
-        result.put("bool" , "bool");
-        result.put("string" , "string");
-        result.put("class" , "class");
-        result.put("null" , "null");
-        result.put("this" , "this");
-        result.put("for" , "for");
+        Hashtable<String, String> result = new Hashtable<>();
+        result.put("void", "void");
+        result.put("int", "int");
+        result.put("double", "double");
+        result.put("bool", "bool");
+        result.put("string", "string");
+        result.put("class", "class");
+        result.put("null", "null");
+        result.put("this", "this");
+        result.put("for", "for");
         result.put("while", "while");
         result.put("if", "if");
         result.put("else", "else");
-        result.put("return","return");
-        result.put("break" , "break");
-        result.put("continue" , "continue");
-        result.put("new" , "new");
-        result.put("NewArray" , "NewArray");
+        result.put("return", "return");
+        result.put("break", "break");
+        result.put("continue", "continue");
+        result.put("new", "new");
+        result.put("NewArray", "NewArray");
         result.put("getArrVal", "getArrVal");
         result.put("Print", "Print");
         result.put("ReadInteger", "ReadInteger");
-        result.put("ReadLine" , "ReadLine");
+        result.put("ReadLine", "ReadLine");
         result.put("itod", "itod");
-        result.put("dtoi" , "dtoi");
+        result.put("dtoi", "dtoi");
         result.put("btoi", "btoi");
         result.put("itob", "itob");
         result.put("private", "private");
         result.put("public", "public");
+        result.put("true", "true");
+        result.put("false", "false");
         return result;
     }
 
@@ -148,11 +202,42 @@ public class Main {
     }
 
     private static void resolver(String keyWord) {
+        Hashtable<String, String> keywords = initializeKeyWords();
+
+        if (keywords.contains(keyWord)) {
+            if (keyWord.equals("true") || keyWord.equals("false")) {
+                receiver(BOOLEAN, keyWord);
+            } else {
+                receiver(KEYWORD, keyWord);
+            }
+        } else {
+            receiver(ID, keyWord);
+        }
 
     }
 
     private static void receiver(int type, String keyWord) {
-        System.out.println(type + "  " + keyWord);
+        switch (type) {
+            case ID:
+                System.out.println("T_ID " + keyWord);
+                break;
+            case INTEGER:
+                System.out.println("T_INTLITERAL " + keyWord);
+                break;
+            case DOUBLE:
+                System.out.println("T_DOUBLELITERAL " + keyWord);
+                break;
+            case STRING:
+                System.out.println("T_STRINGLITERAL " + keyWord);
+                break;
+            case BOOLEAN:
+                System.out.println("T_BOOLEANLITERAL " + keyWord);
+                break;
+            case KEYWORD:
+                System.out.println(keyWord);
+                break;
+
+        }
     }
 }
 
