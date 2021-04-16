@@ -16,12 +16,12 @@ do
     output_filename="$filename.out"
     report_filename="$filename.report.txt"
     echo "Running Test $filename -------------------------------------"
-    javac src/Main.java
+    javac Main.java
     if [ $? -eq 1 ]; then
         echo "Compile Error"
     else
         echo "Code Compiled Successfully"
-        java main -i $filelist -o $output_filename
+        java Main -i $filelist -o $output_filename
         if [ $? -eq 0 ]; then
             echo "Code Executed Successfuly!"
             if command -v python3; then

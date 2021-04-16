@@ -16,102 +16,137 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+        try {
+            String inputFileName = null;
+            String outputFileName = null;
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i].equals("-i")) {
+                        inputFileName = args[i + 1];
+                    }
+                    if (args[i].equals("-o")) {
+                        outputFileName = args[i + 1];
+                    }
+                }
+            }
+            Reader reader = null;
+            Writer writer = null;
+            if (inputFileName != null)
+             //   reader = new FileReader("tests/" + inputFileName);
+                readFile(new File("tests/"+inputFileName));
+            int j;
+            if (outputFileName != null)
+                writer = new FileWriter( "out/" + outputFileName);
 
-        Scanner scanner = new Scanner(System.in);
+            // Read with reader and write the output with writer.
+
+        }
+        catch(Exception e) {
+            return;
+        }
+
+
+        }
+
+    private static void readFile(File file) {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            System.out.println("file not fount");
+        }
+        if(scanner== null)
+            return;
         StringBuilder code = new StringBuilder("");
         Character[] alphabet = {'+', '-', '(', ')', '*', '/', '%', '<', '>', '=', '!', '&', '|', ';', ',', '.', '[', ']', '{', '}'};
         ArrayList<Character> keyCharacters = new ArrayList<Character>(Arrays.asList(alphabet));
 
         while (true) {
             String string = scanner.nextLine();
-            if (string.equals("$")) {
-                break;
-            } else
-                code.append(string).append("\n");
+            if (== string) break;
+            code.append(string).append("\n");
         }
 
-        while (code.length() > i) {
-            char ch = code.charAt(i);
-            if (Character.isLetter(ch)) {
-                StringBuilder idBuilder = new StringBuilder("");
-                idBuilder.append(ch);
-                i++;
-                while (code.length() > i && Character.isLetterOrDigit(code.charAt(i)) || code.charAt(i) == '_') {
-                    idBuilder.append(code.charAt(i));
-                    i++;
-                }
-                resolver(idBuilder.toString());
-            } else if (keyCharacters.contains(ch)) {
-                String str = String.valueOf(ch);
-                if (ch == '+' || ch == '-' || ch == '*' || ch == '!' || ch == '<' || ch == '=' || ch == '>') {
-                    if (code.length() == i + 1) {
-                        receiver(KEYWORD, str);
-                    } else {
-                        if (code.charAt(i + 1) == '=') {
-                            receiver(KEYWORD, str.concat("="));
-                            i++;
-                        } else
-                            receiver(KEYWORD, str);
-                    }
-                    i++;
-                } else if (ch == '/') {
-                    if (code.length() == i + 1) {
-                        receiver(KEYWORD, "/");
-                    } else {
-                        switch (code.charAt(++i)) {
-                            case '/':
-                                i++;
-                                while (code.charAt(i) != '\n') {
-                                    i++;
-                                }
-                                i++;
-                                break;
-                            case '*':
-                                i++;
-                                while (code.length() > i + 1 && !(code.charAt(i) == '*' && code.charAt(i + 1) == '/')) {
-                                    i++;
-                                }
-                                i += 2;
-                                break;
-                            case '=':
-                                receiver(KEYWORD, "/=");
-                                i++;
-                                break;
-                            default:
-                                receiver(KEYWORD, "/");
-                                break;
-                        }
-                    }
-                } else if (ch == '&' || ch == '|') {
-                    if (code.charAt(++i) == ch) {
-                        receiver(KEYWORD, str.concat(str));
-                    }
-                    i++;
-                } else {
-                    receiver(KEYWORD, str);
-                    i++;
-                }
-            } else if (Character.isDigit(ch)) {
-                i = numberDetector(code.toString(), i);
-            } else if (ch == '\"') {
-                i++;
-                StringBuilder string = new StringBuilder("\"");
-                if (code.charAt(i) == '\"') {
-                    receiver(STRING, "");
-                } else {
-                    while (code.charAt(i) != '\"') {
-                        string.append(code.charAt(i));
-                        i++;
-                    }
-                    receiver(STRING, string.append("\"").toString());
-                    i++;
-                }
-            } else if (ch == ' ' || ch == '\n') {
-                i++;
-            } else {
-                System.out.println("ino yadetoon raft: " + ch);
+        char ch = code.charAt(i);
+        if (Character.isLetter(ch)) {
+            StringBuilder idBuilder = new StringBuilder("");
+            idBuilder.append(ch);
+            i++;
+            while (code.length() > i && Character.isLetterOrDigit(code.charAt(i)) || code.charAt(i) == '_') {
+                idBuilder.append(code.charAt(i));
                 i++;
             }
+            resolver(idBuilder.toString());
+        } else if (keyCharacters.contains(ch)) {
+            String str = String.valueOf(ch);
+            if (ch == '+' || ch == '-' || ch == '*' || ch == '!' || ch == '<' || ch == '=' || ch == '>') {
+                if (code.length() == i + 1) {
+                    receiver(KEYWORD, str);
+                } else {
+                    if (code.charAt(i + 1) == '=') {
+                        receiver(KEYWORD, str.concat("="));
+                        i++;
+                    } else
+                        receiver(KEYWORD, str);
+                }
+                i++;
+            } else if (ch == '/') {
+                if (code.length() == i + 1) {
+                    receiver(KEYWORD, "/");
+                } else {
+                    switch (code.charAt(++i)) {
+                        case '/':
+                            i++;
+                            while (code.charAt(i) != '\n') {
+                                i++;
+                            }
+                            i++;
+                            break;
+                        case '*':
+                            i++;
+                            while (code.length() > i + 1 && !(code.charAt(i) == '*' && code.charAt(i + 1) == '/')) {
+                                i++;
+                            }
+                            i += 2;
+                            break;
+                        case '=':
+                            receiver(KEYWORD, "/=");
+                            i++;
+                            break;
+                        default:
+                            receiver(KEYWORD, "/");
+                            break;
+                    }
+                }
+            } else if (ch == '&' || ch == '|') {
+                if (code.charAt(++i) == ch) {
+                    receiver(KEYWORD, str.concat(str));
+                }
+                i++;
+            } else {
+                receiver(KEYWORD, str);
+                i++;
+            }
+        } else if (Character.isDigit(ch)) {
+            i = numberDetector(code.toString(), i);
+        } else if (ch == '\"') {
+            i++;
+            StringBuilder string = new StringBuilder("\"");
+            if (code.charAt(i) == '\"') {
+                receiver(STRING, "");
+            } else {
+                while (code.charAt(i) != '\"') {
+                    string.append(code.charAt(i));
+                    i++;
+                }
+                receiver(STRING, string.append("\"").toString());
+                i++;
+            }
+        } else if (ch == ' ' || ch == '\n') {
+            i++;
+        } else {
+            System.out.println("ino yadetoon raft: " + ch);
+            i++;
         }
     }
 
@@ -239,33 +274,3 @@ public class Main {
 
 
 
- /* try {
-            String inputFileName = null;
-            String outputFileName = null;
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    if (args[i].equals("-i")) {
-                        inputFileName = args[i + 1];
-                    }
-                    if (args[i].equals("-o")) {
-                        outputFileName = args[i + 1];
-                    }
-                }
-            }
-            Reader reader = null;
-            Writer writer = null;
-            if (inputFileName != null)
-                reader = new FileReader("tests/" + inputFileName);
-            int j;
-            while ((j=reader.read())!=-1)
-                System.out.println((char)j);
-
-            if (outputFileName != null)
-                writer = new FileWriter( "out/" + outputFileName);
-
-            // Read with reader and write the output with writer.
-
-        }
-        catch(Exception e) {
-            return;
-        }*/
