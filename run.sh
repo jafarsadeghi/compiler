@@ -16,7 +16,7 @@ do
     output_filename="$filename.out"
     report_filename="$filename.report.txt"
     echo "Running Test $filename -------------------------------------"
-    javac main.java
+    javac src/main.java
     if [ $? -eq 1 ]; then
         echo "Compile Error"
     else
