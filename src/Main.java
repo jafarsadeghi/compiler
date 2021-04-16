@@ -19,7 +19,8 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         StringBuilder code = new StringBuilder("");
-        Character[] alphabet = {'+', '-', '(', ')'};
+        Hashtable<String , String > keywords = initiliazeKeyWords();
+        Character[] alphabet = {'+', '-', '(', ')' , '*' , '/' , '%', '<' , '>' , '=' , '!' , '&' ,'|' , ';' , ',' , '.' , '[' , ']'};
         ArrayList<Character> keyCharacters = new ArrayList<Character>(Arrays.asList(alphabet));
 
         while (scanner.hasNext()) {
@@ -65,6 +66,39 @@ public class Main {
                 i = numberDetector(code.toString(), i);
             }
         }
+    }
+
+    private static Hashtable<String, String> initiliazeKeyWords() {
+
+        Hashtable<String , String> result = new Hashtable<>();
+        result.put("void" , "void");
+        result.put("int" , "int");
+        result.put("double" ,"double");
+        result.put("bool" , "bool");
+        result.put("string" , "string");
+        result.put("class" , "class");
+        result.put("null" , "null");
+        result.put("this" , "this");
+        result.put("for" , "for");
+        result.put("while", "while");
+        result.put("if", "if");
+        result.put("else", "else");
+        result.put("return","return");
+        result.put("break" , "break");
+        result.put("continue" , "continue");
+        result.put("new" , "new");
+        result.put("NewArray" , "NewArray");
+        result.put("getArrVal", "getArrVal");
+        result.put("Print", "Print");
+        result.put("ReadInteger", "ReadInteger");
+        result.put("ReadLine" , "ReadLine");
+        result.put("itod", "itod");
+        result.put("dtoi" , "dtoi");
+        result.put("btoi", "btoi");
+        result.put("itob", "itob");
+        result.put("private", "private");
+        result.put("public", "public");
+        return result;
     }
 
     private static int numberDetector(String code, int i) {
