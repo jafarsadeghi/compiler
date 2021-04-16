@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-public class main {
+public class Main {
 
 
     static int ID = 0;
@@ -12,21 +12,22 @@ public class main {
     static int DOUBLE = 3;
     static int BOOLEAN = 4;
     static int CHARACTER = 5;
+    static int i = 0;
 
 
     public static void main(String[] args) throws IOException {
 
-
         Scanner scanner = new Scanner(System.in);
-        String code = scanner.nextLine();
-        int state = 0;
-        int i = 0;
+        StringBuilder code = new StringBuilder("");
         Character[] alphabet = {'+', '-', '(', ')'};
         ArrayList<Character> keyCharacters = new ArrayList<Character>(Arrays.asList(alphabet));
 
+        while (scanner.hasNext()) {
+            code.append(scanner.nextLine()).append("\n");
+        }
 
-        StringBuilder idBuilder = new StringBuilder();
-        while (i <= code.length()) {
+        StringBuilder idBuilder = new StringBuilder("");
+        while (code.length() > i) {
             char ch = code.charAt(i);
             if (Character.isLetter(ch)) {
                 idBuilder.append(ch);
@@ -37,46 +38,33 @@ public class main {
                 }
                 resolver(idBuilder.toString());
             } else if (ch == '/') {
-
+                if (code.length() == i + 1) {
+                    receiver(CHARACTER, "/");
+                } else {
+                    switch (code.charAt(++i)) {
+                        case '/':
+                            i++;
+                            while (code.charAt(i) != '\n') {
+                                i++;
+                            }
+                        case '*':
+                            i++;
+                            while (code.length() > i+1 && !(code.charAt(i) == '*' && code.charAt(i+1) == '/')) {
+                                i++;
+                            }
+                        case '=':
+                            receiver(CHARACTER, "/=");
+                        default:
+                            receiver(CHARACTER, "/");
+                    }
+                }
             } else if (keyCharacters.contains(ch)) {
                 receiver(CHARACTER, String.valueOf(ch));
                 i++;
             } else if (Character.isDigit(ch)) {
-                i = numberDetector(code, i);
+                i = numberDetector(code.toString(), i);
             }
         }
-
-
-       /* try {
-            String inputFileName = null;
-            String outputFileName = null;
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    if (args[i].equals("-i")) {
-                        inputFileName = args[i + 1];
-                    }
-                    if (args[i].equals("-o")) {
-                        outputFileName = args[i + 1];
-                    }
-                }
-            }
-            Reader reader = null;
-            Writer writer = null;
-            if (inputFileName != null)
-                reader = new FileReader("tests/" + inputFileName);
-            int j;
-            while ((j=reader.read())!=-1)
-                System.out.println((char)j);
-
-            if (outputFileName != null)
-                writer = new FileWriter( "out/" + outputFileName);
-
-            // Read with reader and write the output with writer.
-
-        }
-        catch(Exception e) {
-            return;
-        }*/
     }
 
     private static int numberDetector(String code, int i) {
@@ -110,7 +98,7 @@ public class main {
                         hasDecimal = true;
                         i++;
                     }
-                } else if (Character.isDigit(code.charAt(i))){
+                } else if (Character.isDigit(code.charAt(i))) {
                     number.append(code.charAt(i));
                     i++;
                 } else {
@@ -133,3 +121,37 @@ public class main {
         System.out.println(type + "  " + keyWord);
     }
 }
+
+
+
+
+ /* try {
+            String inputFileName = null;
+            String outputFileName = null;
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i].equals("-i")) {
+                        inputFileName = args[i + 1];
+                    }
+                    if (args[i].equals("-o")) {
+                        outputFileName = args[i + 1];
+                    }
+                }
+            }
+            Reader reader = null;
+            Writer writer = null;
+            if (inputFileName != null)
+                reader = new FileReader("tests/" + inputFileName);
+            int j;
+            while ((j=reader.read())!=-1)
+                System.out.println((char)j);
+
+            if (outputFileName != null)
+                writer = new FileWriter( "out/" + outputFileName);
+
+            // Read with reader and write the output with writer.
+
+        }
+        catch(Exception e) {
+            return;
+        }*/
