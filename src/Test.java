@@ -180,6 +180,10 @@ public class Test {
             result.put("public", "public");
             result.put("true", "true");
             result.put("false", "false");
+            /* result.put("interface" , "interface");
+        result.put("extends" , "extends");
+        result.put("implements", "implements");
+       */
             return result;
         }
 

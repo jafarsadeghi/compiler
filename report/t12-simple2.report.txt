@@ -1,1 +1,1 @@
-different line count in these files! : file out/t12-simple2.out : #0 , file tests/t12-simple2.out : #10 
+OK 

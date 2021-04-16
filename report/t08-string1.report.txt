@@ -1,1 +1,1 @@
-different line count in these files! : file out/t08-string1.out : #0 , file tests/t08-string1.out : #10 
+OK 

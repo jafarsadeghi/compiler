@@ -1,1 +1,1 @@
-different line count in these files! : file out/t10-comment1.out : #0 , file tests/t10-comment1.out : #5 
+difference in line #1: file: out/t10-comment1.out -----> content: this <> file: tests/t10-comment1.out -----> content: T_ID this 

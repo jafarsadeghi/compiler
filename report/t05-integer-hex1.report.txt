@@ -1,1 +1,1 @@
-different line count in these files! : file out/t05-integer-hex1.out : #0 , file tests/t05-integer-hex1.out : #8 
+OK 
